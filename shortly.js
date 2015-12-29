@@ -33,7 +33,7 @@ var sess;
 
 app.get('/', util.isLoggedIn,
 function(req, res) {
-    res.render('index');
+  res.render('index');
 });
 
 app.get('/create', util.isLoggedIn,
