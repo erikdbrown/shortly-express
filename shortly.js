@@ -2,6 +2,7 @@ var express = require('express');
 var util = require('./lib/utility');
 var partials = require('express-partials');
 var bodyParser = require('body-parser');
+var session = require('express-session');
 
 
 var db = require('./app/config');
@@ -15,6 +16,12 @@ var app = express();
 
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
+
+app.use(session({
+  secret: 'keyboard cat',
+  resave: false,
+  saveUninitialized: true
+}));
 app.use(partials());
 // Parse JSON (uniform resource locators)
 app.use(bodyParser.json());
@@ -22,19 +29,20 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(__dirname + '/public'));
 
+var sess; 
 
-app.get('/', 
+app.get('/', util.isLoggedIn,
+function(req, res) {
+    res.render('index');
+});
+
+app.get('/create', util.isLoggedIn,
 function(req, res) {
   res.render('index');
 });
 
-app.get('/create', 
-function(req, res) {
-  res.render('index');
-});
-
-app.get('/links', 
-function(req, res) {
+app.get('/links', util.isLoggedIn,
+  function(req, res) {
   Links.reset().fetch().then(function(links) {
     res.send(200, links.models);
   });
@@ -76,8 +84,24 @@ function(req, res) {
 // Write your authentication routes here
 /************************************************************/
 
+app.post('/login', function(req, res) {
+  console.log('Login request received ', req.body.username);
+  util.assignToken(req.body.username, req.body.passwordHash);
+});
 
+app.get('/login', function(req, res) {
+  console.log('GET request to /login ');
+  console.log('request pathname: ', req.path);
+  res.render('login');
+  // res.sendStatus(200);
 
+  // create token to send back in response to app.js fetch
+  // util.assignToken(req.body.username, req.body.passwordHash);
+});
+
+app.post('/signup', function(req, res) {
+  console.log('Sign Up request received ', req.body);
+});
 /************************************************************/
 // Handle the wildcard route last - if all other routes fail
 // assume the route is a short code and try and handle it here.

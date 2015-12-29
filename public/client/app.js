@@ -3,7 +3,10 @@ window.Shortly = Backbone.View.extend({
 
   events: {
     'click li a.index':  'renderIndexView',
-    'click li a.create': 'renderCreateView'
+    'click li a.create': 'renderCreateView',
+    'click li a.login': 'renderLoginView',
+    'click li a.signup': 'renderSignupView',
+    'click input[type=submit]': 'assignToken'
   },
 
   initialize: function(){
@@ -29,6 +32,48 @@ window.Shortly = Backbone.View.extend({
   renderCreateView: function(e){
     e && e.preventDefault();
     this.router.navigate('/create', { trigger: true });
+  },
+
+  renderLoginView: function(e){
+    e && e.preventDefault();
+    this.router.navigate('/login', { trigger: true });
+  },
+
+  renderSignupView: function(e){
+    e && e.preventDefault();
+    this.router.navigate('/signup', { trigger: true });
+  },
+
+  // assignToken: function (username, passwordHash) {
+  //   console.log("clicked")
+  //   var userObject = {
+  //     username: username,
+  //     passwordHash: passwordHash
+  //   };
+
+  //   var token = jwt.sign(userObject, 'secretkey', { expiresIn: '12h' }, function (token) {
+  //     console.log('Token assigned as: ', token);
+  //     $window.localStorage.accessToken = token;
+  //   });
+  // },
+
+  fetch: function (username, passwordHash) {
+    $.ajax({
+      url: 'http://localhost:4568/login',
+      type: 'GET',
+      contentType: 'application/json',
+      data: {
+        username: username,
+        passwordHash: passwordHash
+      },
+      success: function(token) {
+        // store token in local storage
+        window.localStorage.accessToken = token;
+      },
+      error: function(data) {
+        console.error('Error');
+      }
+    });
   },
 
   updateNav: function(routeName){
