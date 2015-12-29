@@ -4,6 +4,7 @@ window.Shortly = Backbone.View.extend({
   events: {
     'click li a.index':  'renderIndexView',
     'click li a.create': 'renderCreateView',
+    'click li a.logout': 'logUserOut'
   },
 
   initialize: function(){
@@ -44,24 +45,16 @@ window.Shortly = Backbone.View.extend({
   //   });
   // },
 
-  fetch: function (username, passwordHash) {
+  logUserOut: function() {
     $.ajax({
-      url: 'http://localhost:4568/login',
-      type: 'GET',
-      contentType: 'application/json',
-      data: {
-        username: username,
-        passwordHash: passwordHash
-      },
-      success: function(token) {
-        // store token in local storage
-        window.localStorage.accessToken = token;
-      },
-      error: function(data) {
-        console.error('Error');
+      type: 'POST',
+      url: '/logout',
+      success: function(){
+        console.log('logged out');
       }
     });
   },
+  
 
   updateNav: function(routeName){
     this.$el.find('.navigation li a')

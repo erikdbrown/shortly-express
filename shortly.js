@@ -90,8 +90,7 @@ app.post('/login', function(req, res) {
 });
 
 app.get('/login', function(req, res) {
-  console.log('GET request to /login ');
-  console.log('request pathname: ', req.path);
+  console.log('GET request to /login');
   res.render('login');
   // res.sendStatus(200);
 
@@ -99,8 +98,20 @@ app.get('/login', function(req, res) {
   // util.assignToken(req.body.username, req.body.passwordHash);
 });
 
-app.post('/signup', function(req, res) {
-  console.log('Sign Up request received ', req.body);
+app.get('/signup', function(req, res) {
+  res.render('signup');
+});
+
+app.post('/signup', util.addNewUser, util.logInUser, function (req, res) {
+  res.render('index');
+});
+  // function(req, res) {
+  // console.log('Sign Up request received ', req.body);
+// });
+
+app.post('/logout', function(req, res) {
+  console.log('Logout request received ', req.body);
+  util.logoutUser(req, res);
 });
 /************************************************************/
 // Handle the wildcard route last - if all other routes fail

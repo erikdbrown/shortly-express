@@ -6,18 +6,15 @@ var User = db.Model.extend({
 
   tableName: 'users',
   hasTimestamps: false,
-  defaults: {
-    'username': '', 
-    'password': ''
-  },
 
-  initialize: function(params) {
-
-    var self = this;
-
-    this.set('username', params.username);
-    bcrypt.hash(params.password, null, null, function(err, hash) {
-      self.set('passwordHash', hash); // need to send this to the db.
+  initialize: function() {
+    this.on('creating', function(model, attrs, options) {
+      console.log(model.get('username'));
+      model.set('username', model.get('username'));
+      // bcrypt.hash(params.password, null, null, function(err, hash) {
+      //   self.set('passwordHash', hash); // need to send this to the db.
+      // });
+      model.set('passwordHash', model.get('passwordHash'));
     });
   }
 });
