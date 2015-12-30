@@ -3,8 +3,7 @@ window.Shortly = Backbone.View.extend({
 
   events: {
     'click li a.index':  'renderIndexView',
-    'click li a.create': 'renderCreateView',
-    'click li a.logout': 'logUserOut'
+    'click li a.create': 'renderCreateView'
   },
 
   initialize: function(){
@@ -31,30 +30,6 @@ window.Shortly = Backbone.View.extend({
     e && e.preventDefault();
     this.router.navigate('/create', { trigger: true });
   },
-
-  // assignToken: function (username, passwordHash) {
-  //   console.log("clicked")
-  //   var userObject = {
-  //     username: username,
-  //     passwordHash: passwordHash
-  //   };
-
-  //   var token = jwt.sign(userObject, 'secretkey', { expiresIn: '12h' }, function (token) {
-  //     console.log('Token assigned as: ', token);
-  //     $window.localStorage.accessToken = token;
-  //   });
-  // },
-
-  logUserOut: function() {
-    $.ajax({
-      type: 'POST',
-      url: '/logout',
-      success: function(){
-        console.log('logged out');
-      }
-    });
-  },
-  
 
   updateNav: function(routeName){
     this.$el.find('.navigation li a')

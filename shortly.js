@@ -33,7 +33,7 @@ var sess;
 
 app.get('/', util.isLoggedIn,
 function(req, res) {
-  res.render('index');
+  res.render('index'); /// still needs to be processed
 });
 
 app.get('/create', util.isLoggedIn,
@@ -84,34 +84,28 @@ function(req, res) {
 // Write your authentication routes here
 /************************************************************/
 
-app.post('/login', function(req, res) {
+app.post('/login', util.validateUsernamePassword, util.logInUser, function(req, res) {
   console.log('Login request received ', req.body.username);
-  util.assignToken(req.body.username, req.body.passwordHash);
+  // util.assignToken(req.body.username, req.body.passwordHash);
 });
 
 app.get('/login', function(req, res) {
   console.log('GET request to /login');
   res.render('login');
-  // res.sendStatus(200);
-
-  // create token to send back in response to app.js fetch
-  // util.assignToken(req.body.username, req.body.passwordHash);
 });
 
 app.get('/signup', function(req, res) {
   res.render('signup');
 });
 
-app.post('/signup', util.addNewUser, util.logInUser, function (req, res) {
-  res.render('index');
-});
-  // function(req, res) {
-  // console.log('Sign Up request received ', req.body);
-// });
+app.post('/signup', util.addNewUser, util.logInUser);
 
-app.post('/logout', function(req, res) {
-  console.log('Logout request received ', req.body);
-  util.logoutUser(req, res);
+app.get('/logout', function(req, res) {
+  console.log('Logout request received ', req.session); // remember to remove next() in logoutUser
+  req.session.destroy(function(){
+    console.log("Session destroyed")
+    res.redirect('/login'); 
+  });
 });
 /************************************************************/
 // Handle the wildcard route last - if all other routes fail
