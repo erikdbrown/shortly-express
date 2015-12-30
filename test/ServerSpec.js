@@ -59,15 +59,15 @@ describe('', function() {
       });
   });
 
-  xdescribe('Link creation:', function(){
+  describe('Link creation:', function(){
 
     var requestWithSession = request.defaults({jar: true});
 
-    xbeforeEach(function(done){
+    beforeEach(function(done){
       // create a user that we can then log-in with
       new User({
           'username': 'Phillip',
-          'password': 'Phillip'
+          'passwordHash': 'Phillip'
       }).save().then(function(){
         var options = {
           'method': 'POST',
@@ -101,7 +101,7 @@ describe('', function() {
       });
     });
 
-    xdescribe('Shortening links:', function(){
+    describe('Shortening links:', function(){
 
       var options = {
         'method': 'POST',
@@ -150,7 +150,7 @@ describe('', function() {
 
     }); // 'Shortening links'
 
-    xdescribe('With previously saved urls:', function(){
+    describe('With previously saved urls:', function(){
 
       var link;
 
@@ -238,7 +238,7 @@ describe('', function() {
 
   }); // 'Priviledged Access'
 
-  xdescribe('Account Creation:', function(){
+  describe('Account Creation:', function(){
 
     it('Signup creates a user record', function(done) {
       var options = {
@@ -286,14 +286,14 @@ describe('', function() {
 
   }); // 'Account Creation'
 
-  xdescribe('Account Login:', function(){
+  describe('Account Login:', function(){
 
     var requestWithSession = request.defaults({jar: true});
 
     beforeEach(function(done){
       new User({
           'username': 'Phillip',
-          'password': 'Phillip'
+          'passwordHash': 'Phillip'
       }).save().then(function(){
         done()
       });

@@ -8,14 +8,14 @@ var User = db.Model.extend({
   hasTimestamps: false,
 
   initialize: function() {
-    this.on('creating', function(model, attrs, options) {
-      console.log(model.get('username'));
-      model.set('username', model.get('username'));
-      // bcrypt.hash(params.password, null, null, function(err, hash) {
-      //   self.set('passwordHash', hash); // need to send this to the db.
+    // this.on('creating', function(model, attrs, options) {
+      // model.set('username', model.get('username'));
+      // bcrypt.hash(model.get('passwordHash'), null, null, function(err, hash) {
+      //   console.log('password hashed : ', hash);
+      //   model.set('passwordHash', hash); // need to send this to the db.
+      //   // model.save();
       // });
-      model.set('passwordHash', model.get('passwordHash'));
-    });
+    // });
   }
 });
 

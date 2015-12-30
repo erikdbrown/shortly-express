@@ -84,10 +84,7 @@ function(req, res) {
 // Write your authentication routes here
 /************************************************************/
 
-app.post('/login', util.validateUsernamePassword, util.logInUser, function(req, res) {
-  console.log('Login request received ', req.body.username);
-  // util.assignToken(req.body.username, req.body.passwordHash);
-});
+app.post('/login', util.validateUsernamePassword, util.logInUser);
 
 app.get('/login', function(req, res) {
   console.log('GET request to /login');
